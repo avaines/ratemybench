@@ -4,6 +4,7 @@ import BenchMap from './components/BenchMap';
 import BenchList from './components/BenchList';
 import Layout from './components/Layout';
 import './App.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (

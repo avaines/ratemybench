@@ -6,7 +6,7 @@ import { benchService, Bench } from '../services/benchService';
 
 const mapContainerStyle = {
   width: '60em',
-  height: '40em',
+  height: '30em',
 };
 
 const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
@@ -35,23 +35,22 @@ const BenchMap: React.FC = () => {
   return (
     <>
       <div>
-        <h1>Rate My Bench</h1>
-      </div>
       <LoadScript googleMapsApiKey={googleMapsApiKey}>
         <GoogleMap
           mapContainerStyle={mapContainerStyle}
           center={mapCentre}
           zoom={10}
-        >
+          >
           {benches.map((bench, index) => (
             <Marker
-              key={index}
-              position={{ lat: bench.location.latitude, lng: bench.location.longitude }}
-              title={bench.description}
+            key={index}
+            position={{ lat: bench.location.latitude, lng: bench.location.longitude }}
+            title={bench.description}
             />
           ))}
         </GoogleMap>
       </LoadScript>
+      </div>
     </>
   );
 };
