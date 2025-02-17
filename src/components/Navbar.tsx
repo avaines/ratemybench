@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import BenchForm from './BenchForm';
 import '../styles/navbar.css';
 import '../styles/main.css';

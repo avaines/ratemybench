@@ -21,9 +21,9 @@ export const benchService = {
   },
 
   async addBench(bench: Bench): Promise<void> {
-    // dummy await that alwasy resolves
+    // dummy await that always resolves
+    console.log(bench)
     await new Promise((resolve) => setTimeout(resolve, 1000));
-
 
     // await axios.put(`${API_URL}/benches`, bench);
   },
