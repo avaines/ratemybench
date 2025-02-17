@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { benchService, Bench } from '../services/benchService';
-import BenchForm from './BenchForm';
-import '../styles/main.css';
+// import BenchForm from './BenchForm';
+// import '../styles/main.css';
 
 const mapContainerStyle = {
   width: '60em',
@@ -14,7 +14,6 @@ const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 const BenchMap: React.FC = () => {
   const [benches, setBenches] = useState<Bench[]>([]);
   const [mapCentre, setMapCentre] = useState({ lat: 0, lng: 0 });
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchBenches = async () => {
@@ -37,7 +36,6 @@ const BenchMap: React.FC = () => {
     <>
       <div>
         <h1>Rate My Bench</h1>
-        <button onClick={() => setIsModalOpen(true)}>Add Bench</button>
       </div>
       <LoadScript googleMapsApiKey={googleMapsApiKey}>
         <GoogleMap
@@ -54,14 +52,6 @@ const BenchMap: React.FC = () => {
           ))}
         </GoogleMap>
       </LoadScript>
-      {isModalOpen && (
-        <div className="modal">
-          <div className="modal-content">
-            <span className="close" onClick={() => setIsModalOpen(false)}>&times;</span>
-            <BenchForm />
-          </div>
-        </div>
-      )}
     </>
   );
 };

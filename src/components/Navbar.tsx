@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import BenchForm from './BenchForm';
-import '../styles/navbar.css';
-import '../styles/main.css';
+
 
 const Navbar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
