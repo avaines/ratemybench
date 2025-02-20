@@ -5,7 +5,7 @@ compatibility_date = "2025-02-16"
 
 [[env.production.kv_namespaces]]
 id = "66a5099461f945cfb6843ab6a59d090c"
-binding = "BENCHES"
+binding = "BENCHES_KV"
 
 # See .env
 # VITE_GOOGLE_MAPS_API_KEY="" # Encrypted secret in the console

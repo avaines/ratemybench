@@ -1,0 +1,13 @@
+name = "ratemybench-worker"
+main = "src/index.js"
+compatibility_date = "2023-10-01"
+
+kv_namespaces = [
+  { binding = "BENCHES_KV", id = "66a5099461f945cfb6843ab6a59d090c" }
+]
+
+[observability]
+enabled = true
+
+[vars]
+# AUTH_TOKEN="" # Encrypted secret in the console
