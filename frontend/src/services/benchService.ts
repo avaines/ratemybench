@@ -1,3 +1,5 @@
+// import axios from 'axios';
+
 export interface Bench {
   id: string;
   image: string; // Base64 encoded string
@@ -9,33 +11,20 @@ export interface Bench {
   };
 }
 
+// const API_URL = 'https://api.cloudflare.com/client/v4/accounts/YOUR_ACCOUNT_ID/storage/kv/namespaces/YOUR_NAMESPACE_ID/values';
+
 export const benchService = {
   async getBenches(): Promise<Bench[]> {
-    if (typeof BENCHES_KV === "undefined") {
-      console.error("KV Namespace not available.");
-      return [];
-    }
-
-    // List all stored keys in the KV namespace
-    const list = await BENCHES_KV.list();
-    const benches: Bench[] = [];
-
-    for (const { name } of list.keys) {
-      const benchData = await BENCHES_KV.get(name, "json");
-      if (benchData) {
-        benches.push(benchData);
-      }
-    }
-
-    return benches;
+    // const response = await axios.get(`${API_URL}/benches`);
+    // return response.data;
+    return [];
   },
 
   async addBench(bench: Bench): Promise<void> {
-    if (typeof BENCHES_KV === "undefined") {
-      console.error("KV Namespace not available.");
-      return;
-    }
+    // dummy await that always resolves
+    console.log(bench)
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    await BENCHES_KV.put(bench.id, JSON.stringify(bench));
+    // await axios.put(`${API_URL}/benches`, bench);
   },
 };
