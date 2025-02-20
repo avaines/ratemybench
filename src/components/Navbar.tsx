@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import BenchForm from './BenchForm';
-import Button from 'react-bootstrap/Button';
+import { Button, Container, Navbar, Nav } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 
-const Navbar = () => {
+const Navigation = () => {
   // const [isModalOpen, setIsModalOpen] = useState(false);
   const [show, setShow] = useState(false);
 
@@ -12,25 +12,22 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a className="navbar-brand" href="/">Rate My Bench</a>
-        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav">
-            <li className="nav-item active">
-              <a className="nav-link" href="/list">Benches</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/map">Map</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="#" onClick={handleShow}>Add-a-bench</a>
-            </li>
-          </ul>
-        </div>
-      </nav>
+      <Navbar bg="light" expand="lg">
+        <Container>
+          <Navbar.Brand href="#home" className="d-flex align-items-center">
+            <img src="/logo.png" alt="Logo" height="30" className="me-2" />
+            RateMyBench
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav>
+              <Nav.Link href="/list">Benches</Nav.Link>
+              <Nav.Link href="/map">Map</Nav.Link>
+              <Nav.Link href="#" onClick={handleShow}>Add-a-bench</Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
 
       <Modal show={show} onHide={handleClose}>
         <BenchForm />
@@ -47,4 +44,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default Navigation;

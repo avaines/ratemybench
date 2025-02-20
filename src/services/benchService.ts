@@ -1,5 +1,3 @@
-// import axios from 'axios';
-
 export interface Bench {
   id: string;
   image: string; // Base64 encoded string
@@ -11,33 +9,33 @@ export interface Bench {
   };
 }
 
-// const API_URL = 'https://api.cloudflare.com/client/v4/accounts/YOUR_ACCOUNT_ID/storage/kv/namespaces/YOUR_NAMESPACE_ID/values';
-
 export const benchService = {
   async getBenches(): Promise<Bench[]> {
-    // const response = await axios.get(`${API_URL}/benches`);
-    // return response.data;
-    return [];
+    if (typeof BENCHES_KV === "undefined") {
+      console.error("KV Namespace not available.");
+      return [];
+    }
+
+    // List all stored keys in the KV namespace
+    const list = await BENCHES_KV.list();
+    const benches: Bench[] = [];
+
+    for (const { name } of list.keys) {
+      const benchData = await BENCHES_KV.get(name, "json");
+      if (benchData) {
+        benches.push(benchData);
+      }
+    }
+
+    return benches;
   },
 
   async addBench(bench: Bench): Promise<void> {
-    // dummy await that always resolves
-    console.log(bench)
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    if (typeof BENCHES_KV === "undefined") {
+      console.error("KV Namespace not available.");
+      return;
+    }
 
-    // await axios.put(`${API_URL}/benches`, bench);
+    await BENCHES_KV.put(bench.id, JSON.stringify(bench));
   },
 };
-
-// export const getBenchesByLocation = async (latitude: number, longitude: number, radius: number): Promise<Bench[]> => {
-//     const benches = await benchService.getBenches();
-//     return benches.filter(bench => {
-//         const distance = Math.sqrt(Math.pow(bench.location.latitude - latitude, 2) + Math.pow(bench.location.longitude - longitude, 2));
-//         return distance <= radius;
-//     });
-// };
-
-// export const getBenchesByRating = async (minRating: number): Promise<Bench[]> => {
-//     const benches = await benchService.getBenches();
-//     return benches.filter(bench => bench.rating >= minRating);
-// };

@@ -5,8 +5,8 @@ import { benchService, Bench } from '../services/benchService';
 // import '../styles/main.css';
 
 const mapContainerStyle = {
-  width: '60em',
-  height: '30em',
+  width: '100vw',
+  height: '80vh',
 };
 
 const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
@@ -34,7 +34,7 @@ const BenchMap: React.FC = () => {
 
   return (
     <>
-      <div>
+      <div className="d-flex justify-content-center">
       <LoadScript googleMapsApiKey={googleMapsApiKey}>
         <GoogleMap
           mapContainerStyle={mapContainerStyle}
