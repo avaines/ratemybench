@@ -10,8 +10,8 @@ export default {
       if (!request.headers.get('Authorization') === `Bearer ${AUTH_TOKEN}`) {
         return new Response(JSON.stringify({'message':'Unauthorised'}), { status: 401, headers: getCorsHeaders() });
       }
-
-      switch (request.method) {
+      console.log(request.method, pathname);
+      switch (request.method.toUpperCase()) {
         case 'GET':
           return handleGet(pathname, searchParams);
         case 'POST':
