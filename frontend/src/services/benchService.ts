@@ -26,7 +26,7 @@ export const benchService = {
   },
 
   async addBench(bench: Bench): Promise<void> {
-    await axios.post(`${API_URL}/benches`, bench, {
+    await axios.post(`${API_URL}/`, bench, {
       headers: {
         Authorization: `Bearer ${AUTH_TOKEN}`
       }
