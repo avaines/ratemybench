@@ -38,7 +38,6 @@ const BenchList: React.FC = () => {
             <th>Description</th>
             <th>Rating</th>
             <th>Image</th>
-            <th>Location</th>
           </tr>
         </thead>
         <tbody>
@@ -55,7 +54,6 @@ const BenchList: React.FC = () => {
                   onClick={() => handleImageClick(bench)}
                 />
               </td>
-              <td>{bench.location.latitude}, {bench.location.longitude}</td>
             </tr>
           ))}
         </tbody>
