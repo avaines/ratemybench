@@ -8,7 +8,7 @@ id = "66a5099461f945cfb6843ab6a59d090c"
 binding = "BENCHES_KV"
 
 [vars]
-VITE_RATEMYBENCH_URL="https://ratemybench-worker.aiden-a32.workers.dev"
+VITE_RATEMYBENCH_URL="https://api.ratemybench.vaines.org"
 
 # See .env
 # VITE_GOOGLE_MAPS_API_KEY="" # Encrypted secret in the console

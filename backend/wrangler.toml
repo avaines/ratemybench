@@ -6,6 +6,10 @@ kv_namespaces = [
   { binding = "BENCHES_KV", id = "66a5099461f945cfb6843ab6a59d090c" }
 ]
 
+routes = [
+  { pattern = "api.ratemybench.vaines.org", custom_domain = true }
+]
+
 [observability]
 enabled = true
 
