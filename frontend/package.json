@@ -13,6 +13,7 @@
 	"dependencies": {
 		"@react-google-maps/api": "^2.20.6",
 		"@types/react-router-dom": "^5.3.3",
+		"axios": "^1.7.9",
 		"bootstrap": "^5.3.3",
 		"exifreader": "^4.26.1",
 		"react": "^18.3.1",

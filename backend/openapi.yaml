@@ -1,0 +1,121 @@
+openapi: 3.0.0
+info:
+  title: RateMyBench API
+  version: 1.0.0
+  description: API for managing benches in the RateMyBench application.
+paths:
+  /benches:
+    get:
+      summary: Get all benches
+      operationId: getBenches
+      responses:
+        '200':
+          description: A list of benches
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Bench'
+        '401':
+          description: Unauthorized
+        '404':
+          description: No items found
+    post:
+      summary: Create a new bench
+      operationId: createBench
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Bench'
+      responses:
+        '201':
+          description: Bench created
+        '401':
+          description: Unauthorized
+  /benches/{id}:
+    get:
+      summary: Get a bench by ID
+      operationId: getBenchById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A single bench
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bench'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Bench not found
+    put:
+      summary: Update a bench by ID
+      operationId: updateBench
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Bench'
+      responses:
+        '200':
+          description: Bench updated
+        '401':
+          description: Unauthorized
+        '404':
+          description: Bench not found
+    delete:
+      summary: Delete a bench by ID
+      operationId: deleteBench
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Bench deleted
+        '401':
+          description: Unauthorized
+        '404':
+          description: Bench not found
+components:
+  schemas:
+    Bench:
+      type: object
+      properties:
+        id:
+          type: string
+        image:
+          type: string
+          description: Base64 encoded string
+        description:
+          type: string
+        rating:
+          type: number
+          format: float
+          description: Rating out of 5
+        location:
+          type: object
+          properties:
+            latitude:
+              type: number
+              format: float
+            longitude:
+              type: number
+              format: float

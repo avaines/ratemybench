@@ -12,9 +12,11 @@ const BenchForm: React.FC = () => {
   const [rating, setRating] = useState(0);
   const [image, setImage] = useState('');
   const [location, setLocation] = useState({ lat: 0, lng: 0 });
+  const [isSubmitting, setIsSubmitted] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitted(true);
     const bench: Bench = {
       id: uuidv4(),
       description,
@@ -74,60 +76,60 @@ const BenchForm: React.FC = () => {
 
   return (
     <>
-        <Modal.Header closeButton>
-          <Modal.Title>Add A Bench</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={handleSubmit}>
-            <FloatingLabel controlId="description" label="Leave a description of the bench here" className="mb-3">
-              <Form.Control
-                as="textarea"
-                placeholder="Leave a description of the bench here"
-                onChange={(e) => setDescription(e.target.value)}
-                style={{ height: '100px' }}
-                value={description}
-              />
-            </FloatingLabel>
+      <Modal.Header closeButton>
+        <Modal.Title>Add A Bench</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form onSubmit={handleSubmit}>
+          <FloatingLabel controlId="description" label="Leave a description of the bench here" className="mb-3">
+            <Form.Control
+              as="textarea"
+              placeholder="Leave a description of the bench here"
+              onChange={(e) => setDescription(e.target.value)}
+              style={{ height: '100px' }}
+              value={description}
+            />
+          </FloatingLabel>
 
-            <FloatingLabel controlId="rating" label="Rating out of 5" className="mb-3">
-              <Form.Control
-                type="range"
-                onChange={(e) => setRating(Number(e.target.value))}
-                value={rating}
-                min={1}
-                max={5}
-              />
-            </FloatingLabel>
+          <FloatingLabel controlId="rating" label="Rating out of 5" className="mb-3">
+            <Form.Control
+              type="range"
+              onChange={(e) => setRating(Number(e.target.value))}
+              value={rating}
+              min={1}
+              max={5}
+            />
+          </FloatingLabel>
 
-            <FloatingLabel controlId="image" label="Upload an image" className="mb-3">
-              <Form.Control
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-              />
-            </FloatingLabel>
+          <FloatingLabel controlId="image" label="Upload an image" className="mb-3">
+            <Form.Control
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+            />
+          </FloatingLabel>
 
-            <FloatingLabel controlId="location" label="Location (Latitude, Longitude)" className="mb-3">
-              <Form.Control
-                type="text"
-                value={`${location.lat}, ${location.lng}`}
-                onChange={(e) => {
-                  const [lat, lng] = e.target.value.split(',').map(Number);
-                  setLocation({ lat, lng });
-                }}
-              />
-            </FloatingLabel>
+          <FloatingLabel controlId="location" label="Location (Latitude, Longitude)" className="mb-3">
+            <Form.Control
+              type="text"
+              value={`${location.lat}, ${location.lng}`}
+              onChange={(e) => {
+                const [lat, lng] = e.target.value.split(',').map(Number);
+                setLocation({ lat, lng });
+              }}
+            />
+          </FloatingLabel>
 
-            <div className="d-flex justify-content-between">
-              <Button variant="info" onClick={handleLocation}>
-                Get Location
-              </Button>
-              <Button variant="primary" type="submit">
-                Submit
-              </Button>
-            </div>
-          </Form>
-        </Modal.Body>
+          <div className="d-flex justify-content-between">
+            <Button variant="info" onClick={handleLocation}>
+              Get Location
+            </Button>
+            <Button variant="primary" type="submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Submitted' : 'Submit'}
+            </Button>
+          </div>
+        </Form>
+      </Modal.Body>
     </>
   );
 };

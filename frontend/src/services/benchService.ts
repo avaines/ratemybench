@@ -1,4 +1,7 @@
-// import axios from 'axios';
+import axios from 'axios';
+
+const API_URL = import.meta.env.VITE_RATEMYBENCH_WORKER_URL;
+const AUTH_TOKEN = import.meta.env.VITE_RATEMYBENCH_WORKER_API_KEY;
 
 export interface Bench {
   id: string;
@@ -11,20 +14,47 @@ export interface Bench {
   };
 }
 
-// const API_URL = 'https://api.cloudflare.com/client/v4/accounts/YOUR_ACCOUNT_ID/storage/kv/namespaces/YOUR_NAMESPACE_ID/values';
-
 export const benchService = {
   async getBenches(): Promise<Bench[]> {
-    // const response = await axios.get(`${API_URL}/benches`);
-    // return response.data;
-    return [];
+    const response = await axios.get(`${API_URL}/`, {
+      headers: {
+        Authorization: `Bearer ${AUTH_TOKEN}`
+      }
+    });
+    const data = response.data;
+    return Array.isArray(data) ? data.map(item => JSON.parse(item)) : [];
   },
 
   async addBench(bench: Bench): Promise<void> {
-    // dummy await that always resolves
-    console.log(bench)
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await axios.post(`${API_URL}/benches`, bench, {
+      headers: {
+        Authorization: `Bearer ${AUTH_TOKEN}`
+      }
+    });
+  },
 
-    // await axios.put(`${API_URL}/benches`, bench);
+  async getBenchById(id: string): Promise<Bench> {
+    const response = await axios.get(`${API_URL}/benches/${id}`, {
+      headers: {
+        Authorization: `Bearer ${AUTH_TOKEN}`
+      }
+    });
+    return response.data;
+  },
+
+  async updateBench(id: string, bench: Bench): Promise<void> {
+    await axios.put(`${API_URL}/benches/${id}`, bench, {
+      headers: {
+        Authorization: `Bearer ${AUTH_TOKEN}`
+      }
+    });
+  },
+
+  async deleteBench(id: string): Promise<void> {
+    await axios.delete(`${API_URL}/benches/${id}`, {
+      headers: {
+        Authorization: `Bearer ${AUTH_TOKEN}`
+      }
+    });
   },
 };
