@@ -16,10 +16,10 @@ export default {
           return handleGet(pathname, searchParams);
         case 'POST':
           return handlePost(request);
-        case 'PUT':
-          return handlePut(request);
-        case 'DELETE':
-          return handleDelete(pathname);
+        // case 'PUT':
+        //   return handlePut(request);
+        // case 'DELETE':
+        //   return handleDelete(pathname);
         case 'OPTIONS':
           return handleOptions();
         default:

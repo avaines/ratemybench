@@ -23,7 +23,7 @@ const Navigation = () => {
             <Nav>
               <Nav.Link href="/list">Benches</Nav.Link>
               <Nav.Link href="/map">Map</Nav.Link>
-              <Nav.Link href="#" onClick={handleShow}>Add-a-bench</Nav.Link>
+              <Nav.Link href="#" onClick={handleShow}>Add Bench</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>

@@ -18,6 +18,7 @@ const Footer: React.FC = () => {
           <ul className="list-unstyled">
             <h6>Socials</h6>
             <li><a href="https://linktr.ee/avaines">Linktree</a></li>
+            <li><a href="https://github.com/avaines/ratemybench">This app on Github</a></li>
             <li><a href="https://www.vaines.org">My Blog</a></li>
             {/* <li><a href="#instagram">Instagram</a></li> */}
           </ul>
