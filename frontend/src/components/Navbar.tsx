@@ -1,25 +1,26 @@
 import React, { useState } from 'react';
 import { benchService, Bench } from '../services/benchService';
-import { Button, Container, Navbar, Nav, Form, Modal, FloatingLabel } from 'react-bootstrap';
+import { Button, ButtonGroup, Container, Navbar, Nav, Form, Modal, FloatingLabel } from 'react-bootstrap';
 import { v4 as uuidv4 } from 'uuid';
 import ExifReader from 'exifreader';
 
 const Navigation = () => {
-  // const [isModalOpen, setIsModalOpen] = useState(false);
-  const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const [show, setShow] = useState(false);
   const [description, setDescription] = useState('');
-  const [rating, setRating] = useState(0);
   const [image, setImage] = useState('');
   const [location, setLocation] = useState({ lat: 0, lng: 0 });
+  const [rating, setRating] = useState<number | null>(null);
+  const [hover, setHover] = useState<number | null>(null);
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const bench: Bench = {
       id: uuidv4(),
       description,
-      rating,
+      rating: rating ?? 0,
       image,
       location: {
         latitude: location.lat,
@@ -110,15 +111,39 @@ const Navigation = () => {
               />
             </FloatingLabel>
 
-            <FloatingLabel controlId="rating" label="Rating out of 5" className="mb-3">
-              <Form.Control
-                type="range"
-                onChange={(e) => setRating(Number(e.target.value))}
-                value={rating}
-                min={1}
-                max={5}
-              />
-            </FloatingLabel>
+            <div className="mb-3">
+              <Form.Label>Rating:</Form.Label>
+              <ButtonGroup>
+                {[...Array(5)].map((_star, index) => {
+                  const currentRating = index + 1;
+
+                  return (
+                    <Form.Check
+                      key={index}
+                      type="radio"
+                      name="rating"
+                      id={`rating-${currentRating}`}
+                      value={currentRating}
+                      onChange={() => setRating(currentRating)}
+                      label={
+                        <span
+                          className="star"
+                          style={{
+                            color:
+                              currentRating <= (hover ?? rating ?? 0) ? "#ffc107" : "#e4e5e9",
+                          }}
+                          onMouseEnter={() => setHover(currentRating)}
+                          onMouseLeave={() => setHover(null)}
+                        >
+                          &#9733;
+                        </span>
+                      }
+                      style={{ display: 'inline-block', marginRight: '10px' }}
+                    />
+                  );
+                })}
+              </ButtonGroup>
+            </div>
 
             <FloatingLabel controlId="image" label="Upload an image" className="mb-3">
               <Form.Control
@@ -149,7 +174,6 @@ const Navigation = () => {
             <Button variant="secondary" onClick={handleClose}>
               Close
             </Button>
-            {/* <Button variant="primary" type="submit" onClick={handleClose}> */}
             <Button variant="primary" type="submit">
               Save Changes
             </Button>
