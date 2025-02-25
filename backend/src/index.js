@@ -56,10 +56,10 @@ export default {
 
     async function handlePost(request) {
       const bench = await request.json();
-      bench.reviewed = false;
+      bench.reviewed = true; //TODO: Set to False with sendReviewEmail working
       bench.submissionDate = new Date().toISOString();
       await BENCHES_KV.put(bench.id, JSON.stringify(bench));
-      await sendReviewEmail(bench.id);
+      // await sendReviewEmail(bench.id); //TODO: Resolve email sending
       return new Response(JSON.stringify({'message':'Bench submitted for review'}), { status: 201, headers: getCorsHeaders() });
     }
 
