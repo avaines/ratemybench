@@ -1,28 +1,25 @@
 import axios from 'axios';
+import { Bench } from '../types/bench';
 
 const API_URL = import.meta.env.VITE_RATEMYBENCH_WORKER_URL;
 const AUTH_TOKEN = import.meta.env.VITE_RATEMYBENCH_WORKER_API_KEY;
 
-export interface Bench {
-  id: string;
-  image: string; // Base64 encoded string
-  description: string;
-  rating: number; // Rating out of 5
-  location: {
-    latitude: number;
-    longitude: number;
-  };
-}
-
 export const benchService = {
   async getBenches(): Promise<Bench[]> {
-    const response = await axios.get(`${API_URL}/`, {
-      headers: {
-        Authorization: `Bearer ${AUTH_TOKEN}`
+    try {
+      const response = await axios.get(`${API_URL}/`, {
+        headers: {
+          Authorization: `Bearer ${AUTH_TOKEN}`
+        }
+      });
+      const data = response.data;
+      return Array.isArray(data) ? data.map(item => JSON.parse(item)) : [];
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response && error.response.status === 404 && error.response.data.message === "No approved benches found") {
+        return [];
       }
-    });
-    const data = response.data;
-    return Array.isArray(data) ? data.map(item => JSON.parse(item)) : [];
+      throw error;
+    }
   },
 
   async addBench(bench: Bench): Promise<void> {
@@ -34,7 +31,7 @@ export const benchService = {
   },
 
   async getBenchById(id: string): Promise<Bench> {
-    const response = await axios.get(`${API_URL}/benches/${id}`, {
+    const response = await axios.get(`${API_URL}/${id}`, {
       headers: {
         Authorization: `Bearer ${AUTH_TOKEN}`
       }
@@ -43,7 +40,7 @@ export const benchService = {
   },
 
   async updateBench(id: string, bench: Bench): Promise<void> {
-    await axios.put(`${API_URL}/benches/${id}`, bench, {
+    await axios.put(`${API_URL}/${id}`, bench, {
       headers: {
         Authorization: `Bearer ${AUTH_TOKEN}`
       }

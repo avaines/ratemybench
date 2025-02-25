@@ -51,7 +51,7 @@ This project uses environment variables for sensitive data like API tokens. You'
     cp 'example .dev.vars' .dev.vars
     vi .dev.vars # Now update the SQUARE_ACCESS_TOKEN & LOCATION_ID environmental variables you details
     npx wrangler login
-    npx wrangler dev # will run the function in a local execution environment
+    npx wrangler dev --remote # will run the function in a execution environment with a remote KV (remote needed for the email functionality)
     npx wrangler deploy # will deploy the worker to the cloudflare
 ```
     - Populate AUTH_TOKEN environmental variable

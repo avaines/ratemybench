@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { benchService, Bench } from '../services/benchService';
+import { benchService } from '../services/benchService';
 import { Button, ButtonGroup, Container, Navbar, Nav, Form, Modal, FloatingLabel } from 'react-bootstrap';
+import { Bench } from '../types/bench';
 import { v4 as uuidv4 } from 'uuid';
 import ExifReader from 'exifreader';
+
 
 const Navigation = () => {
   const handleClose = () => setShow(false);
@@ -13,23 +15,32 @@ const Navigation = () => {
   const [location, setLocation] = useState({ lat: 0, lng: 0 });
   const [rating, setRating] = useState<number | null>(null);
   const [hover, setHover] = useState<number | null>(null);
-
+  const [showAlert, setShowAlert] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!image) {
+      alert("Please upload an image.");
+      return;
+    }
+    if (rating === null) {
+      alert("Rate that bench!");
+      return;
+    }
     const bench: Bench = {
       id: uuidv4(),
       description,
-      rating: rating ?? 0,
+      rating: rating,
       image,
       location: {
         latitude: location.lat,
         longitude: location.lng,
       },
+      name: ''
     };
     handleClose();
     await benchService.addBench(bench);
-    window.location.reload();
+    setShowAlert(true);
   };
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,7 +56,6 @@ const Navigation = () => {
         const latRef = tags.GPSLatitudeRef?.description as string | undefined; // 'North latitude' or 'South latitude'
         const lngRef = tags.GPSLongitudeRef?.description as string | undefined; // 'East longitude' or 'West longitude'
 
-        console.log(lat, lng, latRef, lngRef);
 
         if (lat && lng && lat.length === 3 && lng.length === 3 && latRef && lngRef) {
           const isSouth = latRef.includes("South");
@@ -56,9 +66,11 @@ const Navigation = () => {
             lng: (lng[0] + lng[1] / 60 + lng[2] / 3600) * (isWest ? -1 : 1),
           };
 
+          console.log(lat, lng, latRef, lngRef);
           console.log(newLocation);
+
           setLocation(newLocation);
-          (document.getElementById('location') as HTMLInputElement).value = `${lat}, ${lng}`;
+          (document.getElementById('location') as HTMLInputElement).value = `${newLocation.lat}, ${newLocation.lng}`;
         } else {
           handleLocation();
         }
@@ -150,6 +162,7 @@ const Navigation = () => {
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
+                required
               />
             </FloatingLabel>
 
@@ -175,11 +188,17 @@ const Navigation = () => {
               Close
             </Button>
             <Button variant="primary" type="submit">
-              Save Changes
+              Submit Bench
             </Button>
           </Modal.Footer>
         </Form>
       </Modal>
+      {showAlert && (
+        <div className="alert alert-success alert-dismissible fade show" role="alert">
+          Thanks for your submission, it will be approved shortly!
+          <button type="button" className="btn-close" aria-label="Close" onClick={() => setShowAlert(false)}></button>
+        </div>
+      )}
     </>
   );
 };

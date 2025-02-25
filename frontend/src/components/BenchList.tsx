@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Image, Modal } from 'react-bootstrap';
-import { benchService, Bench } from '../services/benchService';
+import { benchService } from '../services/benchService';
+import { Bench } from '../types/bench';
 
 const BenchList: React.FC = () => {
   const [benches, setBenches] = useState<Bench[]>([]);
@@ -29,6 +30,11 @@ const BenchList: React.FC = () => {
     return '⭐'.repeat(rating);
   };
 
+  const formatDate = (isoString: string) => {
+    const date = new Date(isoString);
+    return date.toLocaleDateString();
+  };
+
   return (
     <div>
       <h1>Benches</h1>
@@ -38,6 +44,7 @@ const BenchList: React.FC = () => {
             <th>Description</th>
             <th>Rating</th>
             <th>Image</th>
+            <th>Submitted</th>
           </tr>
         </thead>
         <tbody>
@@ -54,6 +61,7 @@ const BenchList: React.FC = () => {
                   onClick={() => handleImageClick(bench)}
                 />
               </td>
+              <td>{bench.submissionDate ? formatDate(bench.submissionDate) : 'N/A'}</td>
             </tr>
           ))}
         </tbody>
@@ -66,8 +74,8 @@ const BenchList: React.FC = () => {
         <Modal.Body>
           {selectedBench && (
             <>
-              <p><strong>ID:</strong> {selectedBench.id}</p>
               <p><strong>Rating:</strong> {renderRating(selectedBench.rating)}</p>
+              <p><strong>Description:</strong> {selectedBench.description}</p>
               <Image src={selectedBench.image} alt="Bench" fluid />
             </>
           )}

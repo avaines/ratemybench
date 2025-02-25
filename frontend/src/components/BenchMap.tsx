@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-import { benchService, Bench } from '../services/benchService';
+import { benchService } from '../services/benchService';
+import { Bench } from '../types/bench';
 import { Image, Modal } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 
