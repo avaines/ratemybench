@@ -1,7 +1,11 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
+import githubLogo from "../assets/github.svg"
+import signPost from "../assets/signpost.svg"
+import globe from "../assets/globe.svg"
 
 const Footer: React.FC = () => {
+
   return (
     <footer className="bg-light py-4 border-top">
       <Container>
@@ -12,11 +16,9 @@ const Footer: React.FC = () => {
               A Silly project to rate benches. RateMyBench is a platform where you can rate benches and leave reviews. This was just a silly project to learn more about React, Typescript, and Cloudflare Workers, full source code available on <a href="https://github.com/avaines/ratemybench">Github</a>
             </p>
             <div className="d-flex mt-2">
-              <div className="d-flex space-x-2 mt-2">
-                <h2><a href="https://www.vaines.org"><i className="bi bi-globe text-muted-foreground hover:text-foreground transition-colors" style={{ textDecoration: 'none', color: 'black' }}></i></a></h2>
-                <h2><a href="https://linktr.ee/avaines"><i className="bi bi-signpost-2-fill text-muted-foreground hover:text-foreground transition-colors" style={{ textDecoration: 'none', color: 'black' }}></i></a></h2>
-                <h2><a href="https://github.com/avaines/ratemybench"><i className="bi bi-github text-muted-foreground hover:text-foreground transition-colors" style={{ textDecoration: 'none', color: 'black' }}></i></a></h2>
-              </div>
+                <a href="https://github.com/avaines/ratemybench"><img src={githubLogo} alt="Bootstrap" width="32" height="32"/></a>
+                <a href="https://linktr.ee/avaines"><img src={signPost} alt="Bootstrap" width="32" height="32"/></a>
+                <a href="https://www.vaines.org"><img src={globe} alt="Bootstrap" width="32" height="32"/></a>
             </div>
           </Col>
           <Col lg={4} className="mt-4 mt-lg-0">

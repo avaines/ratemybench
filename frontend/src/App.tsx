@@ -3,7 +3,6 @@ import { Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const BenchMap = React.lazy(() => import('./components/BenchMap'));
 const BenchList = React.lazy(() => import('./components/BenchList'));
