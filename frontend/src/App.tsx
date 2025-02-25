@@ -1,14 +1,16 @@
+import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import BenchMap from './components/BenchMap';
-import BenchList from './components/BenchList';
 import Layout from './components/Layout';
-import Sitemap from './components/Sitemap';
-import TermsAndConditions from './components/TermsAndConditions';
-import PrivacyPolicy from './components/PrivacyPolicy';
-import ReviewBench from './components/ReviewBench';
 import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import "bootstrap-icons/font/bootstrap-icons.css";
+import 'bootstrap-icons/font/bootstrap-icons.css';
+
+const BenchMap = React.lazy(() => import('./components/BenchMap'));
+const BenchList = React.lazy(() => import('./components/BenchList'));
+const Sitemap = React.lazy(() => import('./components/Sitemap'));
+const TermsAndConditions = React.lazy(() => import('./components/TermsAndConditions'));
+const PrivacyPolicy = React.lazy(() => import('./components/PrivacyPolicy'));
+const ReviewBench = React.lazy(() => import('./components/ReviewBench'));
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const routes = [
@@ -25,11 +27,13 @@ function App() {
   return (
     <>
       <Layout>
-        <Routes>
-          {routes.map((route) => (
-            <Route key={route.path} path={route.path} element={route.element} />
-          ))}
-        </Routes>
+        <React.Suspense fallback={<div>Loading...</div>}>
+          <Routes>
+            {routes.map((route) => (
+              <Route key={route.path} path={route.path} element={route.element} />
+            ))}
+          </Routes>
+        </React.Suspense>
       </Layout>
     </>
   );
