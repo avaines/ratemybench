@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { benchService } from '../services/benchService';
-import { Button, ButtonGroup, Container, Navbar, Nav, Form, Modal, FloatingLabel } from 'react-bootstrap';
+import { Button, ButtonGroup, Container, Navbar, Nav, Form, Modal, FloatingLabel, ProgressBar } from 'react-bootstrap';
 import { Bench } from '../types/bench';
 import { v4 as uuidv4 } from 'uuid';
 import ExifReader from 'exifreader';
@@ -16,6 +16,7 @@ const Navigation = () => {
   const [rating, setRating] = useState<number | null>(null);
   const [hover, setHover] = useState<number | null>(null);
   const [showAlert, setShowAlert] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,34 +47,55 @@ const Navigation = () => {
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setUploadProgress(0);
       const reader = new FileReader();
       reader.onloadend = async () => {
-        setImage(reader.result as string);
-        const tags = await ExifReader.load(file);
+        const img = new Image();
+        img.onload = async () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          if (!ctx) return;
 
-        const lat = tags.GPSLatitude?.description as number[] | undefined;
-        const lng = tags.GPSLongitude?.description as number[] | undefined;
-        const latRef = tags.GPSLatitudeRef?.description as string | undefined; // 'North latitude' or 'South latitude'
-        const lngRef = tags.GPSLongitudeRef?.description as string | undefined; // 'East longitude' or 'West longitude'
+          const maxWidth = 640;
+          const scale = Math.min(1, maxWidth / img.width);
+          canvas.width = img.width * scale;
+          canvas.height = img.height * scale;
 
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          const resizedImage = canvas.toDataURL('image/jpeg');
 
-        if (lat && lng && lat.length === 3 && lng.length === 3 && latRef && lngRef) {
-          const isSouth = latRef.includes("South");
-          const isWest = lngRef.includes("West");
+          for (let progress = 0; progress <= 100; progress += 10) {
+            await new Promise((resolve) => setTimeout(resolve, 50));
+            setUploadProgress(progress);
+          }
 
-          const newLocation = {
-            lat: (lat[0] + lat[1] / 60 + lat[2] / 3600) * (isSouth ? -1 : 1),
-            lng: (lng[0] + lng[1] / 60 + lng[2] / 3600) * (isWest ? -1 : 1),
-          };
+          setImage(resizedImage);
+          const tags = await ExifReader.load(file);
 
-          console.log(lat, lng, latRef, lngRef);
-          console.log(newLocation);
+          const lat = tags.GPSLatitude?.description as number[] | undefined;
+          const lng = tags.GPSLongitude?.description as number[] | undefined;
+          const latRef = tags.GPSLatitudeRef?.description as string | undefined; // 'North latitude' or 'South latitude'
+          const lngRef = tags.GPSLongitudeRef?.description as string | undefined; // 'East longitude' or 'West longitude'
 
-          setLocation(newLocation);
-          (document.getElementById('location') as HTMLInputElement).value = `${newLocation.lat}, ${newLocation.lng}`;
-        } else {
-          handleLocation();
-        }
+          if (lat && lng && lat.length === 3 && lng.length === 3 && latRef && lngRef) {
+            const isSouth = latRef.includes("South");
+            const isWest = lngRef.includes("West");
+
+            const newLocation = {
+              lat: (lat[0] + lat[1] / 60 + lat[2] / 3600) * (isSouth ? -1 : 1),
+              lng: (lng[0] + lng[1] / 60 + lng[2] / 3600) * (isWest ? -1 : 1),
+            };
+
+            console.log(lat, lng, latRef, lngRef);
+            console.log(newLocation);
+
+            setLocation(newLocation);
+            (document.getElementById('location') as HTMLInputElement).value = `${newLocation.lat}, ${newLocation.lng}`;
+          } else {
+            handleLocation();
+          }
+        };
+        img.src = reader.result as string;
       };
       reader.readAsDataURL(file);
     }
@@ -164,6 +186,9 @@ const Navigation = () => {
                 onChange={handleImageChange}
                 required
               />
+              {uploadProgress > 0 && uploadProgress <= 100 && (
+                <ProgressBar now={uploadProgress} label={`${uploadProgress}%`} className="mt-2" />
+              )}
             </FloatingLabel>
 
             <FloatingLabel controlId="location" label="Location (Latitude, Longitude)" className="mb-3">
