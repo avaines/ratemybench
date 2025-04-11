@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Image, Modal } from 'react-bootstrap';
+import { Table, Image, Modal, Spinner } from 'react-bootstrap';
 import { benchService } from '../services/benchService';
 import { Bench } from '../types/bench';
 
 const BenchList: React.FC = () => {
   const [benches, setBenches] = useState<Bench[]>([]);
+  const [loading, setLoading] = useState(true); // Add loading state
   const [showModal, setShowModal] = useState(false);
   const [selectedBench, setSelectedBench] = useState<Bench | null>(null);
 
@@ -12,6 +13,7 @@ const BenchList: React.FC = () => {
     const fetchBenches = async () => {
       const data = await benchService.getBenches();
       setBenches(data);
+      setLoading(false); // Set loading to false after data is fetched
     };
     fetchBenches();
   }, []);
@@ -32,40 +34,48 @@ const BenchList: React.FC = () => {
 
   const formatDate = (isoString: string) => {
     const date = new Date(isoString);
-    return date.toLocaleDateString();
+    return date.toLocaleDateString('en-GB');
   };
 
   return (
     <div>
       <h1>Benches</h1>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Description</th>
-            <th>Rating</th>
-            <th>Image</th>
-            <th>Submitted</th>
-          </tr>
-        </thead>
-        <tbody>
-          {benches.map((bench) => (
-            <tr key={bench.id}>
-              <td>{bench.description}</td>
-              <td>{renderRating(bench.rating)}</td>
-              <td>
-                <Image
-                  src={bench.image}
-                  alt="Bench"
-                  thumbnail
-                  style={{ width: '100px', height: 'auto', cursor: 'pointer' }}
-                  onClick={() => handleImageClick(bench)}
-                />
-              </td>
-              <td>{bench.submissionDate ? formatDate(bench.submissionDate) : 'N/A'}</td>
+      {loading ? ( // Show spinner while loading
+        <div className="text-center">
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        </div>
+      ) : (
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Rating</th>
+              <th>Image</th>
+              <th>Submitted</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {benches.map((bench) => (
+              <tr key={bench.id}>
+                <td>{bench.description}</td>
+                <td>{renderRating(bench.rating)}</td>
+                <td>
+                  <Image
+                    src={bench.image}
+                    alt="Bench"
+                    thumbnail
+                    style={{ width: '100px', height: 'auto', cursor: 'pointer' }}
+                    onClick={() => handleImageClick(bench)}
+                  />
+                </td>
+                <td>{bench.submissionDate ? formatDate(bench.submissionDate) : 'N/A'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      )}
 
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
